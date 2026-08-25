@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Check PNR</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <a href="login.html">Login</a>
+        <a href="trains.html">View Trains</a>
+        <a href="book.html">Book Ticket</a>
+        <a href="tickets.html">View Ticket</a>
+    </nav>
+
+    <div class="container">
+        <h2>Check Ticket Status</h2>
+        <input type="text" id="pnr" placeholder="Enter PNR Number">
+        <button onclick="checkPNR()">Search Ticket</button>
+        <p id="pnr-output" class="result"></p>
+    </div>
+
+    <script>
+        function checkPNR() {
+            const pnrVal = document.getElementById('pnr').value;
+
+            fetch(`/api/pnr/${pnrVal}`)
+                .then(res => res.json())
+                .then(data => {
+                    const out = document.getElementById('pnr-output');
+                    if (data.found) {
+                        const b = data.booking;
+                        out.textContent = `Passenger: ${b.passenger_name} | Train: ${b.train_name} | Seat: ${b.seat_number}`;
+                    } else {
+                        out.textContent = 'No booking found for this PNR!';
+                    }
+                });
+        }
+    </script>
+</body>
+</html>

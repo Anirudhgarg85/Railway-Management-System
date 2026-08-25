@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Available Trains</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <a href="login.html">Login</a>
+        <a href="trains.html">View Trains</a>
+        <a href="book.html">Book Ticket</a>
+        <a href="tickets.html">View Ticket</a>
+    </nav>
+
+    <div class="container">
+        <h2>Available Trains</h2>
+        <button onclick="fetchTrains()">Load All Trains</button>
+        <ul id="train-list"></ul>
+    </div>
+
+    <script>
+        function fetchTrains() {
+            fetch('/api/trains')
+                .then(res => res.json())
+                .then(data => {
+                    const list = document.getElementById('train-list');
+                    list.innerHTML = '';
+                    data.forEach(t => {
+                        const li = document.createElement('li');
+                        li.textContent = `${t.train_name} (${t.train_number}) | ${t.source} to ${t.destination} | ₹${t.price}`;
+                        list.appendChild(li);
+                    });
+                });
+        }
+        // Auto-load trains when page opens
+        window.onload = fetchTrains;
+    </script>
+</body>
+</html>

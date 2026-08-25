@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Railway System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <a href="login.html">Login</a>
+        <a href="trains.html">View Trains</a>
+        <a href="book.html">Book Ticket</a>
+        <a href="tickets.html">View Ticket</a>
+    </nav>
+
+    <div class="container">
+        <h2>User Login</h2>
+        <input type="text" id="username" placeholder="Username (Default: admin)">
+        <input type="password" id="password" placeholder="Password (Default: 12345)">
+        <button onclick="login()">Login</button>
+        <p id="message" class="result"></p>
+    </div>
+
+    <script>
+        function login() {
+            const u = document.getElementById('username').value;
+            const p = document.getElementById('password').value;
+
+            fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: u, password: p })
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('message').textContent = data.message;
+                if (data.success) {
+                    setTimeout(() => window.location.href = 'trains.html', 1000);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

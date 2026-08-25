@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Ticket</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <a href="login.html">Login</a>
+        <a href="trains.html">View Trains</a>
+        <a href="book.html">Book Ticket</a>
+        <a href="tickets.html">View Ticket</a>
+    </nav>
+
+    <div class="container">
+        <h2>Book Train Ticket</h2>
+        <input type="text" id="passenger" placeholder="Passenger Full Name">
+        <input type="text" id="train" placeholder="Train Name (e.g., Shatabdi Express)">
+        <button onclick="bookTicket()">Confirm Reservation</button>
+        <p id="booking-output" class="result"></p>
+    </div>
+
+    <script>
+        function bookTicket() {
+            const passenger_name = document.getElementById('passenger').value;
+            const train_name = document.getElementById('train').value;
+
+            if (!passenger_name || !train_name) {
+                alert('Please enter all details');
+                return;
+            }
+
+            fetch('/api/book', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ passenger_name, train_name })
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('booking-output').textContent = 
+                    `Success! Your generated PNR is: ${data.pnr} (Assigned Seat: ${data.seat})`;
+            });
+        }
+    </script>
+</body>
+</html>
